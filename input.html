@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Oriented Smart Timetable Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-soft-blue">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary py-3 shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-bullseye me-2"></i>GOAL ORIENTED SMART TIMETABLE GENERATOR
+            </a>
+            <button class="btn btn-light btn-sm rounded-pill" onclick="location.reload()">
+                <i class="fas fa-sync"></i> Reset
+            </button>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>1. Profile & Time Settings</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12 mb-2">
+                            <label class="label-custom">Student ID / Roll Number</label>
+                            <input type="text" class="form-control custom-input" id="studentID" 
+                                   placeholder="Enter your unique ID (e.g., ROLL-101)" 
+                                   oninput="checkExistingUser()">
+                            <div id="idStatus" class="small mt-1 fw-bold" style="display:none;"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="label-custom">Start Day At</label>
+                            <input type="time" class="form-control custom-input" id="startTime" value="08:00">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="label-custom">End Day At</label>
+                            <input type="time" class="form-control custom-input" id="endTime" value="21:00">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="label-custom">Lunch Break</label>
+                            <input type="time" class="form-control custom-input" id="lunchTime" value="13:00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-primary mb-0"><i class="fas fa-graduation-cap me-2"></i>2. Subjects & Syllabus</h5>
+                        <button class="btn btn-primary btn-sm rounded-pill" onclick="addSubject()">
+                            <i class="fas fa-plus me-1"></i> Add Subject
+                        </button>
+                    </div>
+                    <div id="subjectList">
+                        </div>
+                </div>
+
+                <div class="glass-card p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-info mb-0"><i class="fas fa-running me-2"></i>3. Fixed Routine</h5>
+                        <button class="btn btn-info btn-sm rounded-pill text-white" onclick="addActivity()">
+                            <i class="fas fa-plus me-1"></i> Add Activity
+                        </button>
+                    </div>
+                    <div id="activityList">
+                        </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sticky-top" style="top: 20px;">
+                    <div class="glass-card p-4 border-primary border-top border-4 shadow-lg">
+                        <h6 class="fw-bold text-uppercase text-muted small mb-3">Generation Engine</h6>
+                        <div class="mb-4">
+                            <label class="label-custom">Select Weekly Holidays:</label>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <input type="checkbox" class="btn-check" id="leaveSat" value="Saturday">
+                                <label class="btn btn-outline-secondary btn-sm rounded-pill" for="leaveSat">Sat</label>
+                                
+                                <input type="checkbox" class="btn-check" id="leaveSun" value="Sunday" checked>
+                                <label class="btn btn-outline-secondary btn-sm rounded-pill" for="leaveSun">Sun</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-lg w-100 shadow-sm fw-bold py-3 rounded-3" onclick="validateAndGenerate()">
+                            BUILD STRATEGY <i class="fas fa-chevron-right ms-2"></i>
+                        </button>
+                        <p class="text-center mt-3 small text-muted">
+                            <i class="fas fa-shield-alt"></i> Data synced to AdhyaA Cloud
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        window.onload = function() {
+            const lastID = localStorage.getItem("lastActiveStudent");
+            if (lastID && lastID !== "Guest") {
+                document.getElementById("studentID").value = lastID;
+            }
+            addSubject(); // Start with one subject card
+        };
+
+        function validateAndGenerate() {
+            const sid = document.getElementById("studentID").value.trim();
+            if(!sid) {
+                alert("Please enter a Student ID to save your progress!");
+                document.getElementById("studentID").focus();
+                return;
+            }
+            generateTimetable();
+        }
+    </script>
+</body>
+</html>

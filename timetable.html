@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Board | Goal Oriented Smart Timetable Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-soft-blue">
+    <div class="container-fluid py-4">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 px-4">
+            <div>
+                <h3 class="fw-bold text-dark mb-0">Goal Oriented Strategy Board</h3>
+                <p class="text-muted small">Optimized Weekly Roadmap for: <span id="displayStudentID" class="text-primary fw-bold">Guest</span></p>
+            </div>
+            <div class="d-flex gap-2 no-print">
+                <button class="btn btn-outline-primary btn-sm rounded-pill" onclick="window.location.href='input.html'">
+                    <i class="fas fa-edit"></i> Edit Goals
+                </button>
+                <button class="btn btn-primary btn-sm shadow-sm rounded-pill" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print PDF
+                </button>
+            </div>
+        </div>
+
+        <div class="row px-4 mb-3 g-3">
+            <div class="col-lg-7">
+                <div id="motivationBox" class="glass-card p-3 border-start border-info border-4 shadow-sm h-100" style="background: #f0f9ff;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-quote-left text-info fa-2x me-3 opacity-50"></i>
+                        <div>
+                            <p id="quoteText" class="mb-0 fw-bold italic text-dark" style="font-size: 0.95rem;">"Your future is created by what you do today, not tomorrow."</p>
+                            <small id="quoteContext" class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Daily Mindset</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 no-print">
+                <div class="glass-card p-3 d-flex justify-content-between align-items-center border-start border-primary border-4 h-100">
+                    <div>
+                        <span class="text-muted small fw-bold text-uppercase"><i class="fas fa-stopwatch me-1"></i> Focus Timer:</span>
+                        <span id="timerDisplay" class="ms-2 fw-bold fs-4">60:00</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="startBtn" class="btn btn-primary btn-sm rounded-pill" onclick="toggleTimer()">Start Session</button>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetTimer()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row px-4 mb-3 g-3">
+            <div class="col-lg-4">
+                <div class="glass-card p-3 d-flex justify-content-between align-items-center h-100 border-start border-danger border-4">
+                    <div>
+                        <span class="text-muted small fw-bold text-uppercase"><i class="fas fa-hourglass-half me-1"></i> Next Deadline:</span>
+                        <div id="nextSubjectName" class="fw-bold text-primary">---</div>
+                    </div>
+                    <div id="deadlineCountdown" class="fw-bold text-danger animate-pulse">
+                        Calculating...
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="glass-card p-3 h-100 border-start border-success border-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small fw-bold text-uppercase text-muted">Syllabus Completion Track</span>
+                        <span id="progressText" class="small fw-bold text-primary">0% Completion</span>
+                    </div>
+                    <div class="progress" style="height: 10px; border-radius: 10px;">
+                        <div id="syllabusProgress" class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row px-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4">
+                    <h6 class="fw-bold text-uppercase text-muted small mb-3 text-center">Subject Weightage Analysis (%)</h6>
+                    <div style="max-height: 250px; display: flex; justify-content: center; position: relative;">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="timetable" class="px-2">
+            </div>
+
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Identify active session student
+            const currentStudent = localStorage.getItem("lastActiveStudent") || "Guest";
+            document.getElementById("displayStudentID").innerText = currentStudent;
+            
+            // Execute the roadmap engine
+            displayTimetable();
+        });
+    </script>
+</body>
+</html>
